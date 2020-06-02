@@ -5,20 +5,21 @@ import (
 	"errors"
 	"github.com/lib/pq"
 	"time"
-	a "../../postgresql-utils"
+	a "postgresql-utils"
 )
 
 // Estudiantes estructura
 type Estudiantes struct {
-	ID int
-	Nombre string
-	Edad int16
-	Active bool
-	CreateAt time.Time
+	ID        int
+	Nombre    string
+	Edad      int16
+	Active    bool
+	CreateAt  time.Time
 	UpdatedAt time.Time
 }
+
 // Crear Estudiantes
-func Crear(e Estudiantes)  error {
+func Crear(e Estudiantes) error {
 	// MySql es con ? en vez de $
 	q := `INSERT INTO 
 			estudiantes (nombre, edad, active)
@@ -41,7 +42,7 @@ func Crear(e Estudiantes)  error {
 		intNull.Int64 = int64(e.Edad)
 	}
 
-	r,err := stmt.Exec(e.Nombre,intNull,e.Active)
+	r, err := stmt.Exec(e.Nombre, intNull, e.Active)
 	if err != nil {
 		return err
 	}
@@ -73,13 +74,13 @@ func Consultar() (estudiantes []Estudiantes, err error) {
 	for rows.Next() {
 		e := Estudiantes{}
 		err = rows.Scan(
-				&e.ID,
-				&strNull,
-				&intNull,
-				&boolNull,
-				&e.CreateAt,
-				&timeNull,
-			)
+			&e.ID,
+			&strNull,
+			&intNull,
+			&boolNull,
+			&e.CreateAt,
+			&timeNull,
+		)
 		if err != nil {
 			return nil, nil
 		}
@@ -96,8 +97,8 @@ func Consultar() (estudiantes []Estudiantes, err error) {
 }
 
 // Actualizar permite actualizar un registro de estudiantes
-func Actualizar (e Estudiantes) error {
-	q:=`UPDATE estudiantes 
+func Actualizar(e Estudiantes) error {
+	q := `UPDATE estudiantes 
 			SET nombre = $1, edad = $2, active = $3, updated_at = now()
 			WHERE id = $4 `
 
@@ -109,7 +110,7 @@ func Actualizar (e Estudiantes) error {
 		return err
 	}
 	defer stmt.Close()
-	r, err := stmt.Exec(e.Nombre,e.Edad,e.Active, e.ID)
+	r, err := stmt.Exec(e.Nombre, e.Edad, e.Active, e.ID)
 
 	if err != nil {
 		return err

@@ -1,4 +1,4 @@
-package conexion
+package main
 
 import (
 	"database/sql"
@@ -14,8 +14,4 @@ func GetConnection() *sql.DB {
 		log.Fatal(err)
 	}
 	return db
-}
-
-func Conexion() string {
-	return "conexion"
 }

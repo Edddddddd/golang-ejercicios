@@ -7,23 +7,22 @@ import (
 
 type Persona struct {
 	FristName string `json:"first_name"`
-	LastName string `json:"last_name"`
-	Age int `json:"age"`
+	LastName  string `json:"last_name"`
+	Age       int    `json:"age"`
 }
 
-
-func main()  {
+func main() {
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "hola Mundo")
 	})
 	e.GET("/json", func(c echo.Context) error {
-		p:= Persona {
+		p := Persona{
 			FristName: "Alexiys",
-			LastName: "Lazada",
-			Age: 38,
+			LastName:  "Lazada",
+			Age:       38,
 		}
-		return c.JSON(http.StatusOK,p)
+		return c.JSON(http.StatusOK, p)
 	})
 	e.Start(":8080")
 }

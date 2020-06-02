@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func main()  {
+func main() {
 	/*u:= Estudiantes {
 		Nombre :"Gabriela Catalina Silva Gonzalez",
 		Edad :37,
@@ -20,6 +20,6 @@ func main()  {
 		fmt.Println(err)
 	}
 	fmt.Println(es)
-	a:= 0
+	a := 0
 	fmt.Scan(&a)
 }

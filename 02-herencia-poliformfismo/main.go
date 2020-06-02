@@ -1,11 +1,11 @@
 package main
 
 import (
+	us "./user"
 	"bufio"
 	"fmt"
 	"os"
 	"strconv"
-	us "./user"
 )
 
 var numero int
