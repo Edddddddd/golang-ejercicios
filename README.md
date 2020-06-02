@@ -1,12 +1,14 @@
 # Introduction 
 Repositorio con los proyectos de pruebas de las funcionalidades GoLang
 
+Se recomienda trabajar directamente en la carpeta de **%GOPATH%\src\<mi-repo-clonado>** 
+para no tener problema con la importacion de archivos y directorios en el futuro.   
 
 # Getting Started
 Los requisitos necesarios para hacer funcionar estos proyectos es el siguiente:
 1.	Instalacion de [Golang](https://golang.org/dl/)
 2.	Copiar la carpeta **postgresql-utils** en el Directorio *%GOPATH%\src*
-3.- Instale los paquetes de [echo.labstack](https://echo.labstack.com/guide/installation)
+3. Instale los paquetes de [echo.labstack](https://echo.labstack.com/guide/installation)
 
 # Build 
 Para generar el compilado del alguno de los proyectos, acceder a la raiz del proyecto y ejecutar el siguiente comando
