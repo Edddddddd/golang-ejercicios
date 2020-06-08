@@ -82,6 +82,10 @@ func getUsuarios(context echo.Context) error {
 	if err != nil {
 		return context.JSON(http.StatusInternalServerError, "Error")
 	}
+	if es != nil {
+		return context.JSON(http.StatusInternalServerError, "Error")
+	}
+	
 	return context.JSON(http.StatusOK, es)
 }
 
