@@ -2,14 +2,14 @@ package main
 
 import (
 	"database/sql"
-	a "github.com/Edddddddd/golang-proyects/postgresql-utils"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"encoding/json"
+	"fmt"
 	"github.com/lib/pq"
 	"log"
 	"net/http"
-	"os"
 	"time"
+	a "github.com/Edddddddd/golang-proyects/postgresql-utils"
+
 )
 
 type Usuarios struct {
@@ -33,64 +33,6 @@ type Usuarios struct {
 	Barrio                       string    `json:"barrio"`
 }
 
-func main() {
-
-	e := echo.New()
-	logger, err := os.OpenFile(
-		"logs.log",
-		os.O_RDWR|os.O_CREATE|os.O_APPEND,
-		0666,
-	)
-	if err != nil {
-		log.Fatal("no se pudo crear o abrir el archivo %v", err)
-	}
-
-	defer logger.Close()
-	loggerConfig := middleware.LoggerConfig{
-		Output: logger,
-	}
-
-	e.Use(middleware.LoggerWithConfig(loggerConfig))
-	e.Static("/", "public")
-	e.GET("/gopher/:name", gopherName)
-
-	go e.GET("/services-gorilas/users/all", getUsuarios)
-	// go e.GET("/services-gorilas/users/all", attGopher)
-	go e.GET("/services-gorilas/users/all", getUsuarios)
-	go e.GET("/services-gorilas/users/all", getUsuarios)
-	go e.GET("/services-gorilas/users/all", getUsuarios)
-	go e.GET("/services-gorilas/users/all", getUsuarios)
-	go e.GET("/services-gorilas/users/all", getUsuarios)
-	go e.GET("/services-gorilas/users/all", getUsuarios)
-
-	e.Start(":9080")
-}
-
-func attGopher(c echo.Context) error{
-	return c.Attachment("imgs/gopher.jpg", "gopher.jpg")
-}
-
-func gopherName(c echo.Context) error {
-	p := c.Param("name")
-	if p == "jpg" {
-		return c.File("imgs/gopher.jpg")
-	} else if p == "att" {
-		return c.Attachment("imgs/gopher.jpg", "gopher.jpg")
-	}
-	return c.HTML(http.StatusNotFound, "<h1>Error 404</h1>")
-}
-
-func getUsuarios(context echo.Context) error {
-	es, err :=  ConsultarUsuarioGorilas()
-	if err != nil {
-		return context.JSON(http.StatusInternalServerError, err)
-	}
-	if es == nil {
-		return context.JSON(http.StatusInternalServerError, es)
-	}
-
-	return context.JSON(http.StatusOK, es)
-}
 
 // Consulta informacion de los estudiantes
 func ConsultarUsuarioGorilas() (usuarios []Usuarios, err error) {
@@ -191,5 +133,71 @@ func ConsultarUsuarioGorilas() (usuarios []Usuarios, err error) {
 		usuarios = append(usuarios, e)
 	}
 	return usuarios, nil
+
+}
+
+func getUser(w http.ResponseWriter, r *http.Request)  {
+
+	switch r.Method {
+	case http.MethodGet:
+		es, err :=  ConsultarUsuarioGorilas()
+		js, errj := json.Marshal(es)
+
+		if errj != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if es == nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	case http.MethodPost:
+		http.Error(w, "Error", http.StatusInternalServerError)
+
+		// Create a new record.
+	case http.MethodPut:
+		http.Error(w, "Error", http.StatusInternalServerError)
+
+		// Update an existing record.
+	case http.MethodDelete:
+		http.Error(w, "Error", http.StatusInternalServerError)
+
+		// Remove the record.
+	default:
+		// Give an error message.
+	}
+
+}
+
+
+func main() {
+	// runtime.GOMAXPROCS(1) // use only 1 processor core
+	fmt.Println("Servidor iniciado....")
+	// create a default route handler
+	http.HandleFunc( "/services-gorilas/users/all",
+		getUser)
+
+
+	// create a goroutine
+	go func() {
+		// spawn an HTTP server in `other` goroutine
+		log.Fatal( http.ListenAndServe( ":9000", nil ) )
+	}()
+	go func() {
+		// spawn an HTTP server in `other` goroutine
+		log.Fatal( http.ListenAndServe( ":9001", nil ) )
+	}()
+
+	fmt.Println("START SERVER....")
+	// spawn an HTTP server in `main` goroutine
+	log.Fatal( http.ListenAndServe( ":9002", nil ) )
 
 }

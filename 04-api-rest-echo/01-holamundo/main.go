@@ -13,7 +13,7 @@ type Persona struct {
 
 func main() {
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
+	e.GET("/api", func(c echo.Context) error {
 		return c.String(http.StatusOK, "hola Mundo")
 	})
 	e.GET("/json", func(c echo.Context) error {
